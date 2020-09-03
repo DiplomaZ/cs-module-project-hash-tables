@@ -20,8 +20,11 @@ class HashTable:
     Implement this.
     """
 
-    def __init__(self, capacity):
+    def __init__(self, capacity ):
         # Your code here
+        self.capacity = capacity
+        self.table = [None] * self.capacity
+
 
 
     def get_num_slots(self):
@@ -34,6 +37,8 @@ class HashTable:
 
         Implement this.
         """
+        return self.capacity
+
         # Your code here
 
 
@@ -43,6 +48,28 @@ class HashTable:
 
         Implement this.
         """
+        num_slots = len(self.table)
+
+        num_vals = 0
+
+        for val in self.table:
+            if val == None:
+                continue
+            if val.next == True:
+                pointer = val
+                while True:
+                    if pointer.next == None:
+                        break
+                    num_vals += 1
+                    pointer = pointer.next
+
+            else:
+                num_vals += 1
+
+
+
+
+        return num_vals/num_slots
         # Your code here
 
 
@@ -53,6 +80,24 @@ class HashTable:
         Implement this, and/or DJB2.
         """
 
+        FNV_prime = 1099511628211
+        offset_basis = 14695981039346656037
+        hash = offset_basis
+        for c in key:
+            hash = hash*FNV_prime
+            hash = hash ^ ord(c)
+
+        return hash
+
+
+
+
+        # 240 + 28 + 0xb3
+# hash = offset_basis
+# for each octet_of_data to be hashed
+#  hash = hash * FNV_prime
+#  hash = hash xor octet_of_data
+# return hash
         # Your code here
 
 
@@ -71,7 +116,7 @@ class HashTable:
         between within the storage capacity of the hash table.
         """
         #return self.fnv1(key) % self.capacity
-        return self.djb2(key) % self.capacity
+        return self.fnv1(key) % self.capacity
 
     def put(self, key, value):
         """
@@ -80,8 +125,21 @@ class HashTable:
         Hash collisions should be handled with Linked List Chaining.
 
         Implement this.
-        """
-        # Your code here
+        """ 
+        index = self.hash_index(key)
+        if self.table[index] == None:
+            self.table[index] = HashTableEntry(key, value)
+        else:
+            curr_node = self.table[index]
+            while True:
+                if curr_node.key == key:
+                    curr_node.value = value
+                if curr_node.next == None:
+                    curr_node.next = HashTableEntry(key, value)
+                    break
+                else:
+                    curr_node = curr_node.next
+
 
 
     def delete(self, key):
@@ -92,8 +150,25 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
 
+        index = self.hash_index(key)
+        node = self.table[index]
+        if node != None and node.key == key:
+            self.table[index].value = None
+            return
+        while True:
+
+            if node != None and node.next != None:
+                next_node = node.next
+                if next_node.key == key:
+                    node.next = next_node.next
+                    
+                    break
+                else:
+                    node = node.next
+            else:
+                print("this node isn't here I'm really sorry please call back later this value is totally invalid")
+                break
 
     def get(self, key):
         """
@@ -103,22 +178,68 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
+        index = self.hash_index(key)
+        value = None
+        node =self.table[index]
+        while True:
 
+            if node != None:
+                if node.key == key:
+                    value = node.value
+                    break
+                else:
+                    node = node.next
+            else:
+                return None
+        return value
 
     def resize(self, new_capacity):
         """
         Changes the capacity of the hash table and
         rehashes all key/value pairs.
-
+        
         Implement this.
         """
+        
+        self.capacity = new_capacity
+        if self.get_load_factor() > 0.7:
+            new_capacity *= 2
+            self.capacity = new_capacity
+            old_table = self.table
+            self.table = [None]*self.capacity
+
+            for node in old_table:
+
+                while True:
+                    self.put(node.key, node.value)
+
+                    if node.next == None:
+                        break
+                    node = node.next
+
+
+
+        if self.get_load_factor() < 0.2:
+
+            new_capacity //= 2
+            self.capacity = new_capacity
+            new_table = [None]*self.capacity
+
+            for node in self.table:
+                if node != None:
+                    print(node.key)
+                    index = self.hash_index(node.key)
+                    new_table[index] = node
+            self.table = new_table
+
         # Your code here
 
 
 
 if __name__ == "__main__":
-    ht = HashTable(8)
+    ht = HashTable(1)
+
+    print(ht.get_load_factor())
 
     ht.put("line_1", "'Twas brillig, and the slithy toves")
     ht.put("line_2", "Did gyre and gimble in the wabe:")
@@ -138,10 +259,11 @@ if __name__ == "__main__":
     # Test storing beyond capacity
     for i in range(1, 13):
         print(ht.get(f"line_{i}"))
+    print(ht.get_load_factor())
 
     # Test resizing
     old_capacity = ht.get_num_slots()
-    ht.resize(ht.capacity * 2)
+    ht.resize(ht.capacity)
     new_capacity = ht.get_num_slots()
 
     print(f"\nResized from {old_capacity} to {new_capacity}.\n")
@@ -151,3 +273,9 @@ if __name__ == "__main__":
         print(ht.get(f"line_{i}"))
 
     print("")
+    print(ht.get_load_factor())
+
+    # ht.delete("line_6")
+
+    # for i in range(1, 13):
+    #     print(ht.get(f"line_{i}"))
