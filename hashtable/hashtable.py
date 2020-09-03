@@ -200,39 +200,40 @@ class HashTable:
         
         Implement this.
         """
+        while ht.get_load_factor() < 0.2 or ht.get_load_factor() > 0.7:
+
         
-        self.capacity = new_capacity
-        if self.get_load_factor() > 0.7:
-            new_capacity *= 2
             self.capacity = new_capacity
-            old_table = self.table
-            self.table = [None]*self.capacity
+            if self.get_load_factor() > 0.7:
+                new_capacity *= 2
+                self.capacity = new_capacity
+                old_table = self.table
+                self.table = [None]*self.capacity
 
-            for node in old_table:
+                for node in old_table:
 
-                while True:
-                    self.put(node.key, node.value)
+                    while True:
+                        self.put(node.key, node.value)
 
-                    if node.next == None:
-                        break
-                    node = node.next
+                        if node.next == None:
+                            break
+                        node = node.next
 
 
 
-        if self.get_load_factor() < 0.2:
+            if self.get_load_factor() < 0.2:
 
-            new_capacity //= 2
-            self.capacity = new_capacity
-            new_table = [None]*self.capacity
+                new_capacity //= 2
+                self.capacity = new_capacity
+                new_table = [None]*self.capacity
 
-            for node in self.table:
-                if node != None:
-                    print(node.key)
-                    index = self.hash_index(node.key)
-                    new_table[index] = node
-            self.table = new_table
+                for node in self.table:
+                    if node != None:
+                        print(node.key)
+                        index = self.hash_index(node.key)
+                        new_table[index] = node
+                self.table = new_table
 
-        # Your code here
 
 
 
@@ -263,6 +264,7 @@ if __name__ == "__main__":
 
     # Test resizing
     old_capacity = ht.get_num_slots()
+
     ht.resize(ht.capacity)
     new_capacity = ht.get_num_slots()
 
