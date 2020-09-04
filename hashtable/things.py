@@ -23,14 +23,15 @@ print(my_array[hash_index])
 my_array[hash_index] = None
 print("anything???? ",my_array[hash_index])
 
-  unsigned long
-    hash(str)
-    {
-        unsigned long hash = 5381;
-        int c;
+#   unsigned long
+#     hash(str)
+#     {
+#         unsigned long hash = 5381;
+#         int c;
 
-        while (c = *str++)
-            hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
+#         while (c = *str++)
+#             hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
 
-        return hash;
-    }
+#         return hash;
+#     }
+

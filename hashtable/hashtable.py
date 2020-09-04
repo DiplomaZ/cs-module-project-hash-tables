@@ -24,6 +24,8 @@ class HashTable:
         # Your code here
         self.capacity = capacity
         self.table = [None] * self.capacity
+        self.elements = 0
+        # Add A PROPERTY THAT ALLOWS YOU TO TRACK CURRENT ELEMENTS INSTEAD OF TRAVERSING LIST EVERY TIME!!!
 
 
 
@@ -50,21 +52,7 @@ class HashTable:
         """
         num_slots = len(self.table)
 
-        num_vals = 0
-
-        for val in self.table:
-            if val == None:
-                continue
-            if val.next == True:
-                pointer = val
-                while True:
-                    if pointer.next == None:
-                        break
-                    num_vals += 1
-                    pointer = pointer.next
-
-            else:
-                num_vals += 1
+        num_vals = self.elements
 
 
 
@@ -129,12 +117,15 @@ class HashTable:
         index = self.hash_index(key)
         if self.table[index] == None:
             self.table[index] = HashTableEntry(key, value)
+            self.elements += 1
         else:
             curr_node = self.table[index]
             while True:
                 if curr_node.key == key:
+                    #Don't increase num elements here, we found a dupe
                     curr_node.value = value
                 if curr_node.next == None:
+                    self.elements += 1
                     curr_node.next = HashTableEntry(key, value)
                     break
                 else:
@@ -162,7 +153,7 @@ class HashTable:
                 next_node = node.next
                 if next_node.key == key:
                     node.next = next_node.next
-                    
+                    self.elements -= 1
                     break
                 else:
                     node = node.next
@@ -206,18 +197,24 @@ class HashTable:
             self.capacity = new_capacity
             if self.get_load_factor() > 0.7:
                 new_capacity *= 2
+                print(self.get_load_factor())
                 self.capacity = new_capacity
                 old_table = self.table
                 self.table = [None]*self.capacity
+                self.elements = 0
 
+
+                #Traverse the old table and pass each previous val into the put method of our new empty table
                 for node in old_table:
 
                     while True:
-                        self.put(node.key, node.value)
+                        if node != None:
+                            self.put(node.key, node.value)
 
-                        if node.next == None:
-                            break
-                        node = node.next
+                            if node.next == None:
+                                break
+                            node = node.next
+                        else: break
 
 
 
@@ -225,20 +222,29 @@ class HashTable:
 
                 new_capacity //= 2
                 self.capacity = new_capacity
-                new_table = [None]*self.capacity
+                old_table = self.table
+                self.table = [None]*self.capacity
+                self.elements = 0
 
-                for node in self.table:
-                    if node != None:
-                        print(node.key)
-                        index = self.hash_index(node.key)
-                        new_table[index] = node
-                self.table = new_table
+
+
+                #Traverse the old table and pass each previous val into the put method of our new empty table
+                for node in old_table:
+
+                    while True:
+                        if node != None:
+                            self.put(node.key, node.value)
+
+                            if node.next == None:
+                                break
+                            node = node.next
+                        else: break
 
 
 
 
 if __name__ == "__main__":
-    ht = HashTable(1)
+    ht = HashTable(8)
 
     print(ht.get_load_factor())
 
@@ -269,6 +275,10 @@ if __name__ == "__main__":
     new_capacity = ht.get_num_slots()
 
     print(f"\nResized from {old_capacity} to {new_capacity}.\n")
+    print(ht.get_load_factor())
+    print(ht.elements)
+    print(ht.capacity)
+
 
     # Test if data intact after resizing
     for i in range(1, 13):
