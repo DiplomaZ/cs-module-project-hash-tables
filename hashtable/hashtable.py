@@ -191,54 +191,54 @@ class HashTable:
         
         Implement this.
         """
-        while ht.get_load_factor() < 0.2 or ht.get_load_factor() > 0.7:
+        # while self.get_load_factor() < 0.2 or self.get_load_factor() > 0.7:
 
         
+        self.capacity = new_capacity
+        if self.get_load_factor() > 0.7:
+            new_capacity *= 2
+            print(self.get_load_factor())
             self.capacity = new_capacity
-            if self.get_load_factor() > 0.7:
-                new_capacity *= 2
-                print(self.get_load_factor())
-                self.capacity = new_capacity
-                old_table = self.table
-                self.table = [None]*self.capacity
-                self.elements = 0
+            old_table = self.table
+            self.table = [None]*self.capacity
+            self.elements = 0
 
 
-                #Traverse the old table and pass each previous val into the put method of our new empty table
-                for node in old_table:
+            #Traverse the old table and pass each previous val into the put method of our new empty table
+            for node in old_table:
 
-                    while True:
-                        if node != None:
-                            self.put(node.key, node.value)
+                while True:
+                    if node != None:
+                        self.put(node.key, node.value)
 
-                            if node.next == None:
-                                break
-                            node = node.next
-                        else: break
+                        if node.next == None:
+                            break
+                        node = node.next
+                    else: break
 
 
 
-            if self.get_load_factor() < 0.2:
+        if self.get_load_factor() < 0.2:
 
-                new_capacity //= 2
-                self.capacity = new_capacity
-                old_table = self.table
-                self.table = [None]*self.capacity
-                self.elements = 0
+            new_capacity //= 2
+            self.capacity = new_capacity
+            old_table = self.table
+            self.table = [None]*self.capacity
+            self.elements = 0
 
 
 
-                #Traverse the old table and pass each previous val into the put method of our new empty table
-                for node in old_table:
+            #Traverse the old table and pass each previous val into the put method of our new empty table
+            for node in old_table:
 
-                    while True:
-                        if node != None:
-                            self.put(node.key, node.value)
+                while True:
+                    if node != None:
+                        self.put(node.key, node.value)
 
-                            if node.next == None:
-                                break
-                            node = node.next
-                        else: break
+                        if node.next == None:
+                            break
+                        node = node.next
+                    else: break
 
 
 
