@@ -25,7 +25,7 @@ class HashTable:
         self.capacity = capacity
         self.table = [None] * self.capacity
         self.elements = 0
-        # Add A PROPERTY THAT ALLOWS YOU TO TRACK CURRENT ELEMENTS INSTEAD OF TRAVERSING LIST EVERY TIME!!!
+        # A PROPERTY THAT ALLOWS YOU TO TRACK CURRENT ELEMENTS INSTEAD OF TRAVERSING LIST EVERY TIME!!!
 
 
 
@@ -195,6 +195,10 @@ class HashTable:
 
         
         self.capacity = new_capacity
+
+
+        # is the table too large? let's set a new empty table and store the values of the previous table in
+        # old table
         if self.get_load_factor() > 0.7:
             new_capacity *= 2
             print(self.get_load_factor())
@@ -217,7 +221,8 @@ class HashTable:
                     else: break
 
 
-
+        # is the table too small? let's set a new empty table and store the values of the previous table in
+        # old table
         if self.get_load_factor() < 0.2:
 
             new_capacity //= 2
@@ -291,3 +296,24 @@ if __name__ == "__main__":
 
     # for i in range(1, 13):
     #     print(ht.get(f"line_{i}"))
+       # TODO: Need Help Resizing
+    def resize(self, new_capacity):
+        """
+        Changes the capacity of the hash table and
+        rehashes all key/value pairs.
+​
+        Implement this.
+        """
+        # downsize
+        if self.get_load_factor() < 0.2:
+            new_capacity = self.size / 2
+            return new_capacity
+        else:
+            self.size = self.size * 2
+            new_capacity = [None] * self.size
+            # get key to rehash and value to correspond to key
+            for entry in self.capacity:
+                if entry is not None:
+                    self.put(entry.key, entry.value)
+                    
+            self.capacity = new_capacit
