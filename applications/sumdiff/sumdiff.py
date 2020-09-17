@@ -12,4 +12,28 @@ def f(x):
     return x * 4 + 6
 
 # Your code here
+sum_storage = {}
+diff_storage = {}
+for x in q:
+    for y in q:
+        sum_storage[(x,y)] = f(x) + f(y)
+        
+        diff_storage[(x,y)] = f(x) - f(y)
+
+print(diff_storage)
+#get sum_key from sum_dict
+#use sum_key to get sum_value
+#compare sum_value to values in diff_dict
+#find the diff_value=sum_value
+#use diff_value to get diff_key from diff_dict
+#diff_key = f(c)-f(d) that is equal to f(a)+f(b)
+for sum_tuple in sum_storage:
+    for diff_tuple in diff_storage:
+
+        if sum_storage[sum_tuple] == diff_storage[diff_tuple]:
+
+            print(f"{f(sum_tuple[0])} + {f(sum_tuple[1])} = {f(diff_tuple[0])} - {f(diff_tuple[1])}")
+
+
+
 
