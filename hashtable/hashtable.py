@@ -2,6 +2,7 @@ class HashTableEntry:
     """
     Linked List hash table key/value pair
     """
+
     def __init__(self, key, value):
         self.key = key
         self.value = value
@@ -20,14 +21,12 @@ class HashTable:
     Implement this.
     """
 
-    def __init__(self, capacity ):
+    def __init__(self, capacity):
         # Your code here
         self.capacity = capacity
         self.table = [None] * self.capacity
         self.elements = 0
         # A PROPERTY THAT ALLOWS YOU TO TRACK CURRENT ELEMENTS INSTEAD OF TRAVERSING LIST EVERY TIME!!!
-
-
 
     def get_num_slots(self):
         """
@@ -43,31 +42,20 @@ class HashTable:
 
         # Your code here
 
-
     def get_load_factor(self):
         """
         Return the load factor for this hash table.
-
-        Implement this.
         """
         num_slots = len(self.table)
 
         num_vals = self.elements
 
-
-
-
         return num_vals/num_slots
-        # Your code here
-
 
     def fnv1(self, key):
         """
         FNV-1 Hash, 64-bit
-
-        Implement this, and/or DJB2.
         """
-
         FNV_prime = 1099511628211
         offset_basis = 14695981039346656037
         hash = offset_basis
@@ -77,17 +65,12 @@ class HashTable:
 
         return hash
 
-
-
-
         # 240 + 28 + 0xb3
 # hash = offset_basis
 # for each octet_of_data to be hashed
 #  hash = hash * FNV_prime
 #  hash = hash xor octet_of_data
 # return hash
-        # Your code here
-
 
     def djb2(self, key):
         """
@@ -97,13 +80,12 @@ class HashTable:
         """
         # Your code here
 
-
     def hash_index(self, key):
         """
         Take an arbitrary key and return a valid integer index
         between within the storage capacity of the hash table.
         """
-        #return self.fnv1(key) % self.capacity
+        # return self.fnv1(key) % self.capacity
         return self.fnv1(key) % self.capacity
 
     def put(self, key, value):
@@ -113,7 +95,7 @@ class HashTable:
         Hash collisions should be handled with Linked List Chaining.
 
         Implement this.
-        """ 
+        """
         index = self.hash_index(key)
         if self.table[index] == None:
             self.table[index] = HashTableEntry(key, value)
@@ -122,7 +104,7 @@ class HashTable:
             curr_node = self.table[index]
             while True:
                 if curr_node.key == key:
-                    #Don't increase num elements here, we found a dupe
+                    # Don't increase num elements here, we found a dupe
                     curr_node.value = value
                 if curr_node.next == None:
                     self.elements += 1
@@ -130,8 +112,6 @@ class HashTable:
                     break
                 else:
                     curr_node = curr_node.next
-
-
 
     def delete(self, key):
         """
@@ -158,7 +138,8 @@ class HashTable:
                 else:
                     node = node.next
             else:
-                print("this node isn't here I'm really sorry please call back later this value is totally invalid")
+                print(
+                    "this node isn't here I'm really sorry please call back later this value is totally invalid")
                 break
 
     def get(self, key):
@@ -171,7 +152,7 @@ class HashTable:
         """
         index = self.hash_index(key)
         value = None
-        node =self.table[index]
+        node = self.table[index]
         while True:
 
             if node != None:
@@ -188,14 +169,12 @@ class HashTable:
         """
         Changes the capacity of the hash table and
         rehashes all key/value pairs.
-        
+
         Implement this.
         """
         # while self.get_load_factor() < 0.2 or self.get_load_factor() > 0.7:
 
-        
         self.capacity = new_capacity
-
 
         # is the table too large? let's set a new empty table and store the values of the previous table in
         # old table
@@ -207,8 +186,7 @@ class HashTable:
             self.table = [None]*self.capacity
             self.elements = 0
 
-
-            #Traverse the old table and pass each previous val into the put method of our new empty table
+            # Traverse the old table and pass each previous val into the put method of our new empty table
             for node in old_table:
 
                 while True:
@@ -218,8 +196,8 @@ class HashTable:
                         if node.next == None:
                             break
                         node = node.next
-                    else: break
-
+                    else:
+                        break
 
         # is the table too small? let's set a new empty table and store the values of the previous table in
         # old table
@@ -231,9 +209,7 @@ class HashTable:
             self.table = [None]*self.capacity
             self.elements = 0
 
-
-
-            #Traverse the old table and pass each previous val into the put method of our new empty table
+            # Traverse the old table and pass each previous val into the put method of our new empty table
             for node in old_table:
 
                 while True:
@@ -243,9 +219,8 @@ class HashTable:
                         if node.next == None:
                             break
                         node = node.next
-                    else: break
-
-
+                    else:
+                        break
 
 
 if __name__ == "__main__":
@@ -284,7 +259,6 @@ if __name__ == "__main__":
     print(ht.elements)
     print(ht.capacity)
 
-
     # Test if data intact after resizing
     for i in range(1, 13):
         print(ht.get(f"line_{i}"))
@@ -296,7 +270,7 @@ if __name__ == "__main__":
 
     # for i in range(1, 13):
     #     print(ht.get(f"line_{i}"))
-       # TODO: Need Help Resizing
+    # TODO: Need Help Resizing
     def resize(self, new_capacity):
         """
         Changes the capacity of the hash table and
@@ -315,5 +289,5 @@ if __name__ == "__main__":
             for entry in self.capacity:
                 if entry is not None:
                     self.put(entry.key, entry.value)
-                    
-            self.capacity = new_capacit
+
+            self.capacity = new_capacity
