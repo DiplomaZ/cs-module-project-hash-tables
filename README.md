@@ -2,6 +2,21 @@
 
 🔍 This repository showcases a custom implementation of a hash table that uses collision avoidance techniques such as linked list chaining. The implementation includes the HashTable class, which is dependent on the HashTableEntry class that represents a key-value pair. This implementation is inspired by fundamental computer science concepts such as hash functions (specifically FNV-1 and DJB2), load factors, and resizing.
 
+```python
+def fnv1(self, key):
+        """
+        FNV-1 Hash, 64-bit
+        """
+        FNV_prime = 1099511628211
+        offset_basis = 14695981039346656037
+        hash = offset_basis
+        for c in key:
+            hash = hash*FNV_prime
+            hash = hash ^ ord(c)
+
+        return hash
+```
+
 👀 **Why Use Hash Tables?**
 
 Hash tables are an essential data structure that provide fast access to data by using a key-value pair approach. They are used in a wide range of applications, including:
